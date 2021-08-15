@@ -1,13 +1,12 @@
-FROM node:16
+FROM node:15
 
-RUN echo $DATABASE_URL
 # For gyp Err and it needs a Python
 # RUN apk add g++ make python
 
 WORKDIR /app
 
 COPY package.json .
-RUN yarn install
+RUN yarn
 COPY . .
 
 

@@ -26,7 +26,40 @@ let ArticlesController = class ArticlesController {
             .then((v) => v.map((r) => r.title));
     }
     async findOne(id) {
-        return (await this.prismaService.article.findUnique({ where: { id: Number(id) } })).content;
+        return await this.prismaService.article
+            .findUnique({ where: { id: Number(id) } })
+            .then((v) => {
+            if (v.published) {
+                return v;
+            }
+            else {
+                return 'none';
+            }
+        });
+    }
+    async createDraft(articleData) {
+        const { title, content } = articleData;
+        return this.prismaService.article.create({
+            data: {
+                title,
+                content,
+            },
+        });
+    }
+    async togglePublishPost(id) {
+        const postData = await this.prismaService.article.findUnique({
+            where: { id: Number(id) },
+            select: {
+                published: true,
+            },
+        });
+        return this.prismaService.article.update({
+            where: { id: Number(id) || undefined },
+            data: { published: !(postData === null || postData === void 0 ? void 0 : postData.published) },
+        });
+    }
+    async deletePost(id) {
+        return this.prismaService.article.delete({ where: { id: Number(id) } });
     }
 };
 __decorate([
@@ -36,12 +69,33 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ArticlesController.prototype, "findAll", null);
 __decorate([
-    common_1.Get(':id'),
+    common_1.Get('article/:id'),
     __param(0, common_1.Param('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], ArticlesController.prototype, "findOne", null);
+__decorate([
+    common_1.Post('article/create'),
+    __param(0, common_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ArticlesController.prototype, "createDraft", null);
+__decorate([
+    common_1.Put('article/publish/:id'),
+    __param(0, common_1.Param('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ArticlesController.prototype, "togglePublishPost", null);
+__decorate([
+    common_1.Delete('article/delete/:id'),
+    __param(0, common_1.Param('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ArticlesController.prototype, "deletePost", null);
 ArticlesController = __decorate([
     common_1.Controller('articles'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
