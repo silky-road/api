@@ -47,7 +47,7 @@ let ArticlesController = class ArticlesController {
         });
     }
     async togglePublishPost(id) {
-        const postData = await this.prismaService.article.findUnique({
+        const articleData = await this.prismaService.article.findUnique({
             where: { id: Number(id) },
             select: {
                 published: true,
@@ -55,7 +55,7 @@ let ArticlesController = class ArticlesController {
         });
         return this.prismaService.article.update({
             where: { id: Number(id) || undefined },
-            data: { published: !(postData === null || postData === void 0 ? void 0 : postData.published) },
+            data: { published: !(articleData === null || articleData === void 0 ? void 0 : articleData.published) },
         });
     }
     async deletePost(id) {

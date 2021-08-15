@@ -55,7 +55,7 @@ export class ArticlesController {
   async togglePublishPost(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ArticleModel> {
-    const postData = await this.prismaService.article.findUnique({
+    const articleData = await this.prismaService.article.findUnique({
       where: { id: Number(id) },
       select: {
         published: true,
@@ -64,7 +64,7 @@ export class ArticlesController {
 
     return this.prismaService.article.update({
       where: { id: Number(id) || undefined },
-      data: { published: !postData?.published },
+      data: { published: !articleData?.published },
     });
   }
   @Delete('article/delete/:id')
