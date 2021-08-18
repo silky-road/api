@@ -15,7 +15,12 @@ export class Web3Service {
       ethers.utils.arrayify(relayTransactionHash),
     );
   }
-  async callContract(code: string) {
+  async callContract(
+    ethMethod: string,
+    endpoint: string,
+    mintTo = '0x6663184b3521bF1896Ba6e1E776AB94c317204B6',
+    token = '',
+  ) {
     const itx = new ethers.providers.InfuraProvider(
       'ropsten',
       '48c59754939a47608442b51121894612',
@@ -27,26 +32,81 @@ export class Web3Service {
     );
 
     this.deposit(signer);
-    const iface = new ethers.utils.Interface(['function echo(string message)']);
-    const data = iface.encodeFunctionData('echo', [code]);
 
-    console.log(code);
+    if (ethMethod === 'write') {
+      const iface = new ethers.utils.Interface([
+        'function echo(string message)',
+      ]);
+      const data = iface.encodeFunctionData('echo', [endpoint]);
+      const tx = {
+        to: mintTo,
+        data: data,
+        gas: '100000',
+        schedule: 'fast',
+      };
 
-    const tx = {
-      to: '0x6663184b3521bF1896Ba6e1E776AB94c317204B6',
-      data: data,
-      gas: '100000',
-      schedule: 'fast',
-    };
+      const signature = await this.signRequest(tx, signer);
 
-    const signature = await this.signRequest(tx, signer);
+      const relayTransactionHash = await itx.send('relay_sendTransaction', [
+        tx,
+        signature,
+      ]);
 
-    const relayTransactionHash = await itx.send('relay_sendTransaction', [
-      tx,
-      signature,
-    ]);
+      return this.waitTransaction(
+        relayTransactionHash.relayTransactionHash,
+        itx,
+      );
+    } else if (ethMethod === 'mint') {
+      const iface = new ethers.utils.Interface([
+        'function mint(address to, string uri)',
+      ]);
 
-    return this.waitTransaction(relayTransactionHash.relayTransactionHash, itx);
+      const data = iface.encodeFunctionData('mint', [
+        mintTo,
+        endpoint + '/Token : ' + token,
+      ]);
+      const tx = {
+        to: '0xf50c611f015246a36b27fe51204c1d1fb6123ff1',
+        data: data,
+        gas: '1000000',
+        schedule: 'fast',
+      };
+
+      const signature = await this.signRequest(tx, signer);
+
+      const relayTransactionHash = await itx.send('relay_sendTransaction', [
+        tx,
+        signature,
+      ]);
+
+      return this.waitTransaction(
+        relayTransactionHash.relayTransactionHash,
+        itx,
+      );
+    } else {
+      const iface = new ethers.utils.Interface(['function burn(string uri)']);
+      const data = iface.encodeFunctionData('burn', [
+        endpoint + '/Token : ' + token,
+      ]);
+      const tx = {
+        to: '0xf50c611f015246a36b27fe51204c1d1fb6123ff1',
+        data: data,
+        gas: '1000000',
+        schedule: 'fast',
+      };
+
+      const signature = await this.signRequest(tx, signer);
+
+      const relayTransactionHash = await itx.send('relay_sendTransaction', [
+        tx,
+        signature,
+      ]);
+
+      return this.waitTransaction(
+        relayTransactionHash.relayTransactionHash,
+        itx,
+      );
+    }
   }
 
   wait = (milliseconds) => {

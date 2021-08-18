@@ -17,3 +17,10 @@ model Article {
   published Boolean  @default(false)
   tx String @default("")
 }
+
+model Token {
+  id String @id
+  endpoint String
+  curator String
+  deleted Boolean @default(false)
+}
