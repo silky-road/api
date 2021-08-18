@@ -10,7 +10,7 @@ RUN npm install
 COPY . .
 
 RUN npm install prisma -d
-RUN npm prisma generate
+RUN npx prisma generate
 
 
 CMD ["npm", "start:dev"]
