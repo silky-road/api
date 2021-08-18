@@ -26,9 +26,9 @@ services:
     depends_on:
       - silkdb
     ports:
-      - 80:80
+      - '80:80'
     expose:
-      - 80
+      - '80'
     volumes:
       - /app/node_module
       - .:/app
