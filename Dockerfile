@@ -11,4 +11,4 @@ COPY . .
 RUN yarn prisma generat
 
 
-CMD ["yarn", "start"]
+CMD ["yarn", "start:dev"]
