@@ -9,8 +9,8 @@ COPY package.json .
 RUN yarn
 COPY . .
 RUN npm i -g @nestjs/cli
-RUN yarn add prisma -d
-RUN yarn prisma generate
+RUN npm install prisma -d
+RUN npm prisma generate
 
 
-CMD ["yarn", "start:dev"]
+CMD ["npm", "start:dev"]
