@@ -9,7 +9,7 @@ COPY package.json .
 RUN yarn
 COPY . .
 RUN yarn add prisma -d
-RUN yarn prisma generat
+RUN yarn prisma generate
 
 
 CMD ["yarn", "start:dev"]
