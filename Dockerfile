@@ -11,7 +11,7 @@ COPY . .
 
 RUN npm install prisma -d
 RUN npx prisma generate
-RUN sudo chown -R 1000:1000 "/root/.npm"
+RUN chown -R 1000:1000 "/root/.npm"
 
 
 CMD ["npm", "start"]
