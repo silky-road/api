@@ -15,4 +15,4 @@ RUN yarn add prisma -dev
 RUN yarn prisma generate
 
 
-CMD ["yarn", "start:prod"]
+CMD ["yarn", "start:dev"]
