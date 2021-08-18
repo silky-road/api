@@ -6,6 +6,7 @@ FROM node:16
 WORKDIR /app
 RUN npm i -g yarn -f
 RUN npm i -g @nestjs/cli
+RUN npm i -g @nestjs/core
 COPY package.json .
 RUN yarn
 COPY . .
