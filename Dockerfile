@@ -4,7 +4,7 @@ FROM node:16
 # RUN apk add g++ make python
 
 WORKDIR /app
-RUN npm install -g yarn
+RUN npm i -g yarn
 RUN npm i -g @nestjs/cli
 COPY package.json .
 RUN yarn
