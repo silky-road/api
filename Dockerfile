@@ -4,11 +4,11 @@ FROM node:15
 # RUN apk add g++ make python
 
 WORKDIR /app
-
+RUN npm i -g @nestjs/cli
 COPY package.json .
 RUN npm install
 COPY . .
-RUN npm i -g @nestjs/cli
+
 RUN npm install prisma -d
 RUN npm prisma generate
 
