@@ -8,8 +8,7 @@ WORKDIR /app
 COPY package.json .
 RUN yarn
 COPY . .
-RUN yarn prisma generate
-RUN yarn prisma migrate deploy
+RUN yarn prisma generat
 
 
 CMD ["yarn", "start"]
