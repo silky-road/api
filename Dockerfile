@@ -13,4 +13,4 @@ RUN npm install prisma -d
 RUN npx prisma generate
 
 
-CMD ["npm","run", "start:dev"]
+CMD ["npm", "start"]
