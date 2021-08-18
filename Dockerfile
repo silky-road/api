@@ -8,6 +8,7 @@ WORKDIR /app
 COPY package.json .
 RUN yarn
 COPY . .
+RUN yarn add prisma -d
 RUN yarn prisma generat
 
 
