@@ -970,9 +970,9 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@nestjs/cli@^8.0.0":
+"@nestjs/cli@^8.1.1":
   version "8.1.1"
-  resolved "https://registry.npmjs.org/@nestjs/cli/-/cli-8.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-8.1.1.tgz#8b0866306ccf66e726523cf7aa1b435e7740fec8"
   integrity sha512-Jo/vYyrDHJhRIoFevO+A955KX7aLSAV6gn0sbIJBDTKiha1yxfgEbHOk8qP24gNFLwiDn2CKbwph2g6z0v/mNw==
   dependencies:
     "@angular-devkit/core" "12.1.4"
