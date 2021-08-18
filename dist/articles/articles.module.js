@@ -10,14 +10,15 @@ exports.ArticlesModule = void 0;
 const common_1 = require("@nestjs/common");
 const articles_controller_1 = require("./articles.controller");
 const prisma_service_1 = require("../prisma.service");
+const web3_service_1 = require("../web3.service");
 let ArticlesModule = class ArticlesModule {
 };
 ArticlesModule = __decorate([
     common_1.Module({
-        imports: [prisma_service_1.PrismaService],
+        imports: [prisma_service_1.PrismaService, web3_service_1.Web3Service],
         controllers: [articles_controller_1.ArticlesController],
-        providers: [prisma_service_1.PrismaService],
-        exports: [prisma_service_1.PrismaService],
+        providers: [prisma_service_1.PrismaService, web3_service_1.Web3Service],
+        exports: [prisma_service_1.PrismaService, web3_service_1.Web3Service],
     })
 ], ArticlesModule);
 exports.ArticlesModule = ArticlesModule;

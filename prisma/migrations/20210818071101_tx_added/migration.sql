@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Article` ADD COLUMN `tx` VARCHAR(191) NOT NULL DEFAULT '';

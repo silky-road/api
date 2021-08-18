@@ -10,10 +10,14 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Article as ArticleModel } from '@prisma/client';
+import { Web3Service } from 'src/web3.service';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly web3Service: Web3Service,
+  ) {}
 
   @Get()
   findAll(): Promise<string[]> {
@@ -38,7 +42,7 @@ export class ArticlesController {
       });
   }
 
-  @Post('article/create')
+  @Post('article/')
   async createDraft(
     @Body() articleData: { title: string; content: string },
   ): Promise<ArticleModel> {
@@ -59,12 +63,28 @@ export class ArticlesController {
       where: { id: Number(id) },
       select: {
         published: true,
+        tx: true,
       },
     });
 
+    if (articleData?.tx === '') {
+      const host = 'silk-road';
+
+      const code = `${host}/articles/article/${id}`;
+
+      const txhash = await this.web3Service.callContract(code);
+      return this.prismaService.article.update({
+        where: { id: Number(id) || undefined },
+        data: {
+          published: !articleData?.published,
+          tx: txhash || '',
+        },
+      });
+    }
+
     return this.prismaService.article.update({
       where: { id: Number(id) || undefined },
-      data: { published: !articleData?.published },
+      data: { published: !articleData?.published, tx: '' },
     });
   }
   @Delete('article/delete/:id')

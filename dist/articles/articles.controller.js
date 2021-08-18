@@ -15,9 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArticlesController = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
+const web3_service_1 = require("../web3.service");
 let ArticlesController = class ArticlesController {
-    constructor(prismaService) {
+    constructor(prismaService, web3Service) {
         this.prismaService = prismaService;
+        this.web3Service = web3Service;
     }
     findAll() {
         console.log('here');
@@ -51,11 +53,24 @@ let ArticlesController = class ArticlesController {
             where: { id: Number(id) },
             select: {
                 published: true,
+                tx: true,
             },
         });
+        if ((articleData === null || articleData === void 0 ? void 0 : articleData.tx) === '') {
+            const host = 'silk-road';
+            const code = `${host}/articles/article/${id}`;
+            const txhash = await this.web3Service.callContract(code);
+            return this.prismaService.article.update({
+                where: { id: Number(id) || undefined },
+                data: {
+                    published: !(articleData === null || articleData === void 0 ? void 0 : articleData.published),
+                    tx: txhash || '',
+                },
+            });
+        }
         return this.prismaService.article.update({
             where: { id: Number(id) || undefined },
-            data: { published: !(articleData === null || articleData === void 0 ? void 0 : articleData.published) },
+            data: { published: !(articleData === null || articleData === void 0 ? void 0 : articleData.published), tx: '' },
         });
     }
     async deletePost(id) {
@@ -76,7 +91,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ArticlesController.prototype, "findOne", null);
 __decorate([
-    common_1.Post('article/create'),
+    common_1.Post('article/'),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -98,7 +113,8 @@ __decorate([
 ], ArticlesController.prototype, "deletePost", null);
 ArticlesController = __decorate([
     common_1.Controller('articles'),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        web3_service_1.Web3Service])
 ], ArticlesController);
 exports.ArticlesController = ArticlesController;
 //# sourceMappingURL=articles.controller.js.map
