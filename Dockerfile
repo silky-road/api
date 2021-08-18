@@ -6,7 +6,7 @@ FROM node:15
 WORKDIR /app
 
 COPY package.json .
-RUN yarn
+RUN npm install
 COPY . .
 RUN npm i -g @nestjs/cli
 RUN npm install prisma -d
