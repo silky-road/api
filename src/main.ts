@@ -5,6 +5,6 @@ export const HOST = process.env.HOST;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(80);
 }
 bootstrap();

@@ -20,7 +20,7 @@ services:
     stdin_open: true
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     restart: always
     container_name: nest_silkroad
     depends_on:
