@@ -7,7 +7,9 @@ WORKDIR /app
 
 COPY package.json .
 RUN yarn
+RUN yarn add @nest/cli
 COPY . .
+RUN yarn prisma generate
 
 
 CMD ["yarn", "start:dev"]
