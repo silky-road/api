@@ -4,15 +4,9 @@ FROM node:16
 # RUN apk add g++ make python
 
 WORKDIR /app
-RUN npm i -g yarn -f
-RUN npm i -g @nestjs/cli
-RUN npm i -g @nestjs/core
+
 COPY package.json .
-RUN yarn
+RUN npm install -g @nestjs/cli
+
 COPY . .
-
-RUN yarn add prisma -dev
-RUN yarn prisma generate
-
-
-CMD ["yarn", "start:dev"]
+CMD ["npm","run", "start:dev"]
