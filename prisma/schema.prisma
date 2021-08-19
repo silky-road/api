@@ -13,7 +13,7 @@ generator client {
 model Article {
   id Int @id @default(autoincrement())
   title String
-  content String
+  content String @db.LongText
   published Boolean  @default(false)
   tx String @default("")
 }
