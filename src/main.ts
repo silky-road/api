@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import bodyParser from 'body-parser';
-export const HOST = process.env.HOST;
+export const HOST = "HOST : ec2-3-38-101-17.ap-northeast-2.compute.amazonaws.com";
 
 async function bootstrap() {
 const app = await NestFactory.create(AppModule);
